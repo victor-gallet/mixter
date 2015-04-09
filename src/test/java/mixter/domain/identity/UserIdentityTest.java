@@ -8,6 +8,8 @@ import mixter.domain.identity.events.UserRegistered;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.time.Instant;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserIdentityTest extends DomainTest {
@@ -38,8 +40,8 @@ public class UserIdentityTest extends DomainTest {
         // When
         userIdentity.logIn(eventPublisher);
         // Then
-        UserConnected expected = new UserConnected(USER_ID);
-        assertThat(eventPublisher.publishedEvents).contains(expected);
+        UserConnected expected = new UserConnected(new SessionId(), USER_ID, Instant.now());
+        assertThat(eventPublisher.publishedEvents).extracting("userId").contains(USER_ID);
     }
 
     private UserIdentity userIdentityFor(Event... events) {

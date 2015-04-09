@@ -5,6 +5,7 @@ import mixter.EventPublisher;
 import mixter.domain.identity.events.UserConnected;
 import mixter.domain.identity.events.UserRegistered;
 
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +23,7 @@ public class UserIdentity {
     }
 
     public void logIn(EventPublisher eventPublisher) {
-        eventPublisher.publish(new UserConnected(projection.userId));
+        eventPublisher.publish(new UserConnected(new SessionId(), projection.userId, Instant.now()));
     }
 
     private class DecisionProjection {
