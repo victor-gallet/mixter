@@ -1,5 +1,6 @@
 package mixter.domain.identity.events;
 
+import mixter.AggregateId;
 import mixter.Event;
 import mixter.domain.identity.UserId;
 
@@ -28,5 +29,10 @@ public class UserRegistered implements Event {
     @Override
     public int hashCode() {
         return userId != null ? userId.hashCode() : 0;
+    }
+
+    @Override
+    public AggregateId getId() {
+        return userId;
     }
 }

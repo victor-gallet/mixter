@@ -1,8 +1,9 @@
 package mixter.domain.core.subscription;
 
+import mixter.AggregateId;
 import mixter.domain.identity.UserId;
 
-public class SubscriptionId {
+public class SubscriptionId implements AggregateId{
     private final UserId follower;
     private final UserId followee;
 

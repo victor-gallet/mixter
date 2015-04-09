@@ -1,5 +1,6 @@
 package mixter.domain.core.subscription.events;
 
+import mixter.AggregateId;
 import mixter.Event;
 import mixter.domain.core.message.MessageId;
 import mixter.domain.core.subscription.SubscriptionId;
@@ -39,5 +40,10 @@ public class FolloweeMessagePublished implements Event {
         int result = subscriptionId != null ? subscriptionId.hashCode() : 0;
         result = 31 * result + (messageId != null ? messageId.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public AggregateId getId() {
+        return subscriptionId;
     }
 }

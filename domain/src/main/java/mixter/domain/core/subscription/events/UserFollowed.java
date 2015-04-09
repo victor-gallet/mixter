@@ -1,5 +1,6 @@
 package mixter.domain.core.subscription.events;
 
+import mixter.AggregateId;
 import mixter.Event;
 import mixter.domain.core.subscription.SubscriptionId;
 
@@ -28,5 +29,10 @@ public class UserFollowed implements Event {
     @Override
     public int hashCode() {
         return subscriptionId != null ? subscriptionId.hashCode() : 0;
+    }
+
+    @Override
+    public AggregateId getId() {
+        return subscriptionId;
     }
 }

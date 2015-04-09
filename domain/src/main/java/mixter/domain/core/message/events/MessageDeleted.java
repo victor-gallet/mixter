@@ -1,5 +1,6 @@
 package mixter.domain.core.message.events;
 
+import mixter.AggregateId;
 import mixter.Event;
 import mixter.domain.core.message.MessageId;
 
@@ -11,6 +12,11 @@ public class MessageDeleted implements Event {
     }
 
     public MessageId getMessageId() {
+        return messageId;
+    }
+
+    @Override
+    public AggregateId getId() {
         return messageId;
     }
 }

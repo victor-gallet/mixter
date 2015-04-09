@@ -1,8 +1,10 @@
 package mixter.domain.core.message;
 
+import mixter.AggregateId;
+
 import java.util.UUID;
 
-public class MessageId {
+public class MessageId implements AggregateId{
     private final String id;
 
     public MessageId() {

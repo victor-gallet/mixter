@@ -1,5 +1,6 @@
 package mixter.domain.core.message.events;
 
+import mixter.AggregateId;
 import mixter.Event;
 import mixter.domain.core.message.MessageId;
 import mixter.domain.identity.UserId;
@@ -63,5 +64,10 @@ public class MessageReplied implements Event {
 
     public MessageId getOriginalMessageId() {
         return originalMessageId;
+    }
+
+    @Override
+    public AggregateId getId() {
+        return messageId;
     }
 }

@@ -1,5 +1,6 @@
 package mixter.domain.core.message.events;
 
+import mixter.AggregateId;
 import mixter.Event;
 import mixter.domain.core.message.MessageId;
 import mixter.domain.identity.UserId;
@@ -25,5 +26,10 @@ public class MessagePublished implements Event {
 
     public UserId getAuthorId() {
         return authorId;
+    }
+
+    @Override
+    public AggregateId getId() {
+        return messageId;
     }
 }

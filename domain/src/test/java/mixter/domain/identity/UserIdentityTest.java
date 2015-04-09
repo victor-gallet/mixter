@@ -40,7 +40,7 @@ public class UserIdentityTest extends DomainTest {
         // When
         userIdentity.logIn(eventPublisher);
         // Then
-        UserConnected expected = new UserConnected(new SessionId(), USER_ID, Instant.now());
+        UserConnected expected = new UserConnected(SessionId.generate(), USER_ID, Instant.now());
         assertThat(eventPublisher.publishedEvents).extracting("userId").contains(USER_ID);
     }
 

@@ -23,7 +23,7 @@ public class UserIdentity {
     }
 
     public void logIn(EventPublisher eventPublisher) {
-        eventPublisher.publish(new UserConnected(new SessionId(), projection.userId, Instant.now()));
+        eventPublisher.publish(new UserConnected(SessionId.generate(), projection.userId, Instant.now()));
     }
 
     private class DecisionProjection {

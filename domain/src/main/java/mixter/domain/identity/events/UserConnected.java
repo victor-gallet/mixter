@@ -1,5 +1,6 @@
 package mixter.domain.identity.events;
 
+import mixter.AggregateId;
 import mixter.Event;
 import mixter.domain.identity.SessionId;
 import mixter.domain.identity.UserId;
@@ -50,5 +51,10 @@ public class UserConnected implements Event {
         result = 31 * result + (userId != null ? userId.hashCode() : 0);
         result = 31 * result + (now != null ? now.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public AggregateId getId() {
+        return sessionId;
     }
 }
