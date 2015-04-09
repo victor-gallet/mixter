@@ -2,6 +2,7 @@ package mixter.domain.message;
 
 import mixter.AggregateTest;
 import mixter.Event;
+import mixter.SpyEventPublisher;
 import mixter.UserId;
 import mixter.domain.message.events.MessageDeleted;
 import mixter.domain.message.events.MessagePublished;

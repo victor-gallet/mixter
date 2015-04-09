@@ -2,6 +2,7 @@ package mixter.domain.subscription;
 
 import mixter.AggregateTest;
 import mixter.Event;
+import mixter.SpyEventPublisher;
 import mixter.UserId;
 import mixter.domain.message.MessageId;
 import mixter.domain.subscription.events.FolloweeMessagePublished;

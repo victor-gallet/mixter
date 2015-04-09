@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-class Subscription {
+public class Subscription {
     private final DecisionProjection projection;
 
     public Subscription(List<Event> events) {
@@ -33,6 +33,10 @@ class Subscription {
         if (projection.isActive()) {
             eventPublisher.publish(new FolloweeMessagePublished(projection.getId(), messageId));
         }
+    }
+
+    public SubscriptionId getId() {
+        return projection.getId();
     }
 
     class DecisionProjection {
