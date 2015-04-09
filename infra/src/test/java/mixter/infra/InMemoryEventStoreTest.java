@@ -54,28 +54,4 @@ public class InMemoryEventStoreTest {
         assertThat(eventsOfAggregateA.toArray()).extracting("value").containsExactly(1, 2, 3);
     }
 
-    private class EventA implements Event{
-        private AggregateId id;
-        private final int value;
-
-        public EventA(AggregateId id) {
-            this(id,0);
-        }
-
-        public EventA(AggregateId id, int i) {
-            this.id = id;
-            this.value = i;
-        }
-
-        @Override
-        public AggregateId getId() {
-            return id;
-        }
-
-        public int getValue() {
-            return value;
-        }
-    }
-
-    private static class AnAggregateId implements AggregateId{ }
 }
