@@ -89,15 +89,15 @@ class MessageTest extends \PHPUnit_Framework_TestCase
     {
         $fakeEventPublisher = new FakeEventPublisher();
         $authorId = new UserId('clem@mix-it.fr');
-        $messagePublished = new MessagePublished(MessageId::generate(), 'Hello', $authorId);
-        $message = new Message(array($messagePublished));
+        $messageQuacked = new MessageQuacked(MessageId::generate(), 'Hello', $authorId);
+        $message = new Message(array($messageQuacked));
 
         $message->delete($fakeEventPublisher, $authorId);
 
         \Assert\that($fakeEventPublisher->events)->count(1);
-        /** @var MessageDeleted $messageRepublished */
-        $messageRepublished = $fakeEventPublisher->events[0];
-        \Assert\that($messageRepublished->getMessageId())->eq($messagePublished->getMessageId());
-        \Assert\that($messageRepublished->getDeleterId())->eq($authorId);
+        /** @var MessageDeleted $messageDeleted */
+        $messageDeleted = $fakeEventPublisher->events[0];
+        \Assert\that($messageDeleted->getMessageId())->eq($messageQuacked->getMessageId());
+        \Assert\that($messageDeleted->getDeleterId())->eq($authorId);
     }
 }
