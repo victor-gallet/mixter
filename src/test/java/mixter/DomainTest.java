@@ -1,7 +1,7 @@
 package mixter;
 
-import mixter.domain.message.Message;
-import mixter.domain.subscription.Subscription;
+import mixter.domain.core.message.Message;
+import mixter.domain.core.subscription.Subscription;
 
 import java.util.ArrayList;
 import java.util.Collections;
