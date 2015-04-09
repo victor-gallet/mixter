@@ -3,11 +3,11 @@ package mixter.domain.core.message;
 import mixter.DomainTest;
 import mixter.Event;
 import mixter.SpyEventPublisher;
-import mixter.UserId;
 import mixter.domain.core.message.events.MessageDeleted;
 import mixter.domain.core.message.events.MessagePublished;
 import mixter.domain.core.message.events.MessageReplied;
 import mixter.domain.core.message.events.MessageRepublished;
+import mixter.domain.identity.UserId;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -17,11 +17,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class MessageTest extends DomainTest {
 
-    public static final UserId AUTHOR_ID = new UserId();
+    public static final UserId AUTHOR_ID = new UserId("author@mix-it.fr");
     public static final String CONTENT = "hello";
-    public static final UserId USER_ID = new UserId();
-    public static final UserId REPLIER_ID = new UserId();
+    public static final UserId USER_ID = new UserId("someUser@mix-it.fr");
+    public static final UserId REPLIER_ID = new UserId("replier@mix-it.fr");
     public static final String REPLY_CONTENT = "reply content";
+    public static final UserId RANDOM_GUY = new UserId("randomeGuy@mix-it.fr");
     private SpyEventPublisher eventPublisher;
 
     @Before
@@ -49,13 +50,12 @@ public class MessageTest extends DomainTest {
         Message message = messageFor(
                 new MessagePublished(messageId, CONTENT, AUTHOR_ID)
         );
-        UserId userId = new UserId();
 
         // When
-        message.republish(userId, eventPublisher, AUTHOR_ID, CONTENT);
+        message.republish(USER_ID, eventPublisher, AUTHOR_ID, CONTENT);
 
         // Then
-        MessageRepublished expectedEvent = new MessageRepublished(messageId, userId, AUTHOR_ID, CONTENT);
+        MessageRepublished expectedEvent = new MessageRepublished(messageId, USER_ID, AUTHOR_ID, CONTENT);
         assertThat(eventPublisher.publishedEvents).extracting("messageId").containsExactly(expectedEvent.getMessageId());
         assertThat(eventPublisher.publishedEvents).extracting("userId").containsExactly(expectedEvent.getUserId());
     }
@@ -112,7 +112,7 @@ public class MessageTest extends DomainTest {
 
     @Test
     public void whenAMessageIsDeletedBySomeoneElseThenItShouldNotSendMessageDeletedEvent() {
-// Given
+        // Given
         MessageId messageId = new MessageId();
         List<Event> eventHistory = history(
                 new MessagePublished(messageId, CONTENT, AUTHOR_ID)
@@ -121,7 +121,7 @@ public class MessageTest extends DomainTest {
         Message message = new Message(eventHistory);
 
         // When
-        message.delete(new UserId(), eventPublisher);
+        message.delete(RANDOM_GUY, eventPublisher);
 
         // Then
         assertThat(eventPublisher.publishedEvents).isEmpty();
@@ -153,7 +153,7 @@ public class MessageTest extends DomainTest {
         );
 
         // When
-        message.republish(new UserId(), eventPublisher, AUTHOR_ID, CONTENT);
+        message.republish(RANDOM_GUY, eventPublisher, AUTHOR_ID, CONTENT);
 
         // Then
         assertThat(eventPublisher.publishedEvents).isEmpty();

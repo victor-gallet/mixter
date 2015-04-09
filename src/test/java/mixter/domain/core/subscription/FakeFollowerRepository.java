@@ -1,6 +1,6 @@
 package mixter.domain.core.subscription;
 
-import mixter.UserId;
+import mixter.domain.identity.UserId;
 import org.assertj.core.util.Maps;
 import org.assertj.core.util.Sets;
 

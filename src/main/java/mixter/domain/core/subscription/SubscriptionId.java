@@ -1,6 +1,6 @@
 package mixter.domain.core.subscription;
 
-import mixter.UserId;
+import mixter.domain.identity.UserId;
 
 public class SubscriptionId {
     private final UserId follower;

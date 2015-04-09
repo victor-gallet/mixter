@@ -2,11 +2,11 @@ package mixter.domain.core.message;
 
 import mixter.Event;
 import mixter.EventPublisher;
-import mixter.UserId;
 import mixter.domain.core.message.events.MessageDeleted;
 import mixter.domain.core.message.events.MessagePublished;
 import mixter.domain.core.message.events.MessageReplied;
 import mixter.domain.core.message.events.MessageRepublished;
+import mixter.domain.identity.UserId;
 
 import java.util.*;
 import java.util.function.Consumer;

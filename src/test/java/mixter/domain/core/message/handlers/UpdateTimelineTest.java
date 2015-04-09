@@ -1,6 +1,5 @@
 package mixter.domain.core.message.handlers;
 
-import mixter.UserId;
 import mixter.domain.core.message.MessageId;
 import mixter.domain.core.message.TimelineMessage;
 import mixter.domain.core.message.TimelineRepository;
@@ -8,6 +7,7 @@ import mixter.domain.core.message.events.MessagePublished;
 import mixter.domain.core.message.events.MessageRepublished;
 import mixter.domain.core.subscription.SubscriptionId;
 import mixter.domain.core.subscription.events.FolloweeMessagePublished;
+import mixter.domain.identity.UserId;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,8 +18,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class UpdateTimelineTest {
 
-    public static final UserId AUTHOR_ID = new UserId();
-    public static final UserId USER_ID = new UserId();
+    public static final UserId AUTHOR_ID = new UserId("author@mix-it.fr");
+    public static final UserId USER_ID = new UserId("someUser@mix-it.fr");
     public static final String CONTENT = "hello world";
     private TimelineRepositoryFake timelineRepository;
 

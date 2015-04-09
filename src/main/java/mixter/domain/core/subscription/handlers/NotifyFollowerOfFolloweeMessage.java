@@ -1,7 +1,6 @@
 package mixter.domain.core.subscription.handlers;
 
 import mixter.EventPublisher;
-import mixter.UserId;
 import mixter.domain.core.message.events.MessagePublished;
 import mixter.domain.core.message.events.MessageReplied;
 import mixter.domain.core.message.events.MessageRepublished;
@@ -9,6 +8,7 @@ import mixter.domain.core.subscription.FollowerRepository;
 import mixter.domain.core.subscription.Subscription;
 import mixter.domain.core.subscription.SubscriptionId;
 import mixter.domain.core.subscription.SubscriptionRepository;
+import mixter.domain.identity.UserId;
 
 import java.util.Set;
 

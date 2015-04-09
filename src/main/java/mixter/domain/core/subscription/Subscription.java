@@ -2,11 +2,11 @@ package mixter.domain.core.subscription;
 
 import mixter.Event;
 import mixter.EventPublisher;
-import mixter.UserId;
 import mixter.domain.core.message.MessageId;
 import mixter.domain.core.subscription.events.FolloweeMessagePublished;
 import mixter.domain.core.subscription.events.UserFollowed;
 import mixter.domain.core.subscription.events.UserUnfollowed;
+import mixter.domain.identity.UserId;
 
 import java.util.HashMap;
 import java.util.List;

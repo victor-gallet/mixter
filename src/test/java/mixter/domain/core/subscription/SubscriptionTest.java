@@ -2,11 +2,11 @@ package mixter.domain.core.subscription;
 
 import mixter.DomainTest;
 import mixter.SpyEventPublisher;
-import mixter.UserId;
 import mixter.domain.core.message.MessageId;
 import mixter.domain.core.subscription.events.FolloweeMessagePublished;
 import mixter.domain.core.subscription.events.UserFollowed;
 import mixter.domain.core.subscription.events.UserUnfollowed;
+import mixter.domain.identity.UserId;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,8 +15,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class SubscriptionTest extends DomainTest {
 
     private SpyEventPublisher eventPublisher;
-    public static final UserId FOLLOWER = new UserId();
-    public static final UserId FOLLOWEE = new UserId();
+    public static final UserId FOLLOWER = new UserId("follower@mix-it.fr");
+    public static final UserId FOLLOWEE = new UserId("followee@mix-it.fr");
     public static final SubscriptionId SUBSCRIPTION_ID = new SubscriptionId(FOLLOWER, FOLLOWEE);
 
     @Before

@@ -1,6 +1,6 @@
 package mixter.domain.core.message;
 
-import mixter.UserId;
+import mixter.domain.identity.UserId;
 
 public class TimelineMessage {
     private final UserId ownerId;

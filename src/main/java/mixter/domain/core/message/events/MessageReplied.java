@@ -1,8 +1,8 @@
 package mixter.domain.core.message.events;
 
 import mixter.Event;
-import mixter.UserId;
 import mixter.domain.core.message.MessageId;
+import mixter.domain.identity.UserId;
 
 public class MessageReplied implements Event {
     private final UserId authorId;
