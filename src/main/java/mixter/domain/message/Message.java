@@ -11,7 +11,7 @@ import mixter.domain.message.events.MessageRepublished;
 import java.util.*;
 import java.util.function.Consumer;
 
-class Message {
+public class Message {
     private final DecisionProjection projection;
 
     public Message(List<Event> eventHistory) {

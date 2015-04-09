@@ -1,6 +1,6 @@
 package mixter.domain.message;
 
-import mixter.AggregateTest;
+import mixter.DomainTest;
 import mixter.Event;
 import mixter.SpyEventPublisher;
 import mixter.UserId;
@@ -15,7 +15,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class MessageTest extends AggregateTest {
+public class MessageTest extends DomainTest {
 
     public static final UserId AUTHOR_ID = new UserId();
     public static final String CONTENT = "hello";
@@ -208,8 +208,5 @@ public class MessageTest extends AggregateTest {
         assertThat(eventPublisher.publishedEvents).isEmpty();
     }
 
-    private Message messageFor(Event... events) {
-        return new Message(history(events));
-    }
 }
 

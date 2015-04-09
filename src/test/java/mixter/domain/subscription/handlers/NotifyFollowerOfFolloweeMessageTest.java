@@ -1,6 +1,6 @@
 package mixter.domain.subscription.handlers;
 
-import mixter.Event;
+import mixter.DomainTest;
 import mixter.SpyEventPublisher;
 import mixter.UserId;
 import mixter.domain.message.MessageId;
@@ -16,13 +16,9 @@ import mixter.domain.subscription.events.UserFollowed;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class NotifyFollowerOfFolloweeMessageTest {
+public class NotifyFollowerOfFolloweeMessageTest extends DomainTest {
 
     public static final String CONTENT = "Content";
     public static final UserId AUTHOR_ID = new UserId();
@@ -93,15 +89,5 @@ public class NotifyFollowerOfFolloweeMessageTest {
         // Then
         FolloweeMessagePublished followeeMessagePublished = new FolloweeMessagePublished(new SubscriptionId(FOLLOWER_ID, AUTHOR_ID), REPLY_MESSAGE_ID);
         assertThat(eventPublisher.publishedEvents).containsExactly(followeeMessagePublished);
-    }
-
-    Subscription subscriptionFor(Event... events) {
-        return new Subscription(history(events));
-    }
-
-    public List<Event> history(Event... events) {
-        List<Event> eventHistory = new ArrayList<>();
-        Collections.addAll(eventHistory, events);
-        return eventHistory;
     }
 }

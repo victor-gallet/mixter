@@ -1,7 +1,6 @@
 package mixter.domain.subscription;
 
-import mixter.AggregateTest;
-import mixter.Event;
+import mixter.DomainTest;
 import mixter.SpyEventPublisher;
 import mixter.UserId;
 import mixter.domain.message.MessageId;
@@ -13,7 +12,7 @@ import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SubscriptionTest extends AggregateTest {
+public class SubscriptionTest extends DomainTest {
 
     private SpyEventPublisher eventPublisher;
     public static final UserId FOLLOWER = new UserId();
@@ -78,9 +77,5 @@ public class SubscriptionTest extends AggregateTest {
         subscription.notifyFollower(messageId, eventPublisher);
 
         assertThat(eventPublisher.publishedEvents).isEmpty();
-    }
-
-    Subscription subscriptionFor(Event... events) {
-        return new Subscription(history(events));
     }
 }
