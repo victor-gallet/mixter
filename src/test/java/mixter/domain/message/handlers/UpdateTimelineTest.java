@@ -1,4 +1,4 @@
-package mixter.domain.timeline;
+package mixter.domain.message.handlers;
 
 import mixter.UserId;
 import mixter.domain.message.MessageId;
@@ -6,7 +6,6 @@ import mixter.domain.message.TimelineMessage;
 import mixter.domain.message.TimelineRepository;
 import mixter.domain.message.events.MessagePublished;
 import mixter.domain.message.events.MessageRepublished;
-import mixter.domain.message.handlers.UpdateTimeline;
 import mixter.domain.subscription.SubscriptionId;
 import mixter.domain.subscription.events.FolloweeMessagePublished;
 import org.junit.Before;
