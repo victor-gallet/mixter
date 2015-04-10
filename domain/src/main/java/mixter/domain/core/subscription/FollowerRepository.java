@@ -6,4 +6,8 @@ import java.util.Set;
 
 public interface FollowerRepository {
     Set<UserId> getFollowers(UserId authorId);
+
+    void saveFollower(UserId followee, UserId follower);
+
+    void removeFollower(UserId followee, UserId follower);
 }

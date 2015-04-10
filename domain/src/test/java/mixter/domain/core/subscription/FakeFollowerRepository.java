@@ -21,4 +21,18 @@ public class FakeFollowerRepository implements FollowerRepository {
     public Set<UserId> getFollowers(UserId followee) {
         return this.followers.getOrDefault(followee, Sets.newHashSet());
     }
+
+    @Override
+    public void saveFollower(UserId followee, UserId follower) {
+        Set<UserId> userFollowers = followers.getOrDefault(followee, Sets.newHashSet());
+        userFollowers.add(follower);
+        followers.put(followee, userFollowers);
+    }
+
+    @Override
+    public void removeFollower(UserId followee, UserId follower) {
+        Set<UserId> userFollowers = followers.getOrDefault(followee, Sets.newHashSet());
+        userFollowers.remove(follower);
+        followers.put(followee, userFollowers);
+    }
 }
