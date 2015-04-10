@@ -2,6 +2,8 @@ package mixter.domain.core.subscription;
 
 import mixter.Event;
 import mixter.EventPublisher;
+import mixter.doc.Aggregate;
+import mixter.doc.Projection;
 import mixter.domain.core.message.MessageId;
 import mixter.domain.core.subscription.events.FolloweeMessagePublished;
 import mixter.domain.core.subscription.events.UserFollowed;
@@ -13,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
+@Aggregate
 public class Subscription {
     private final DecisionProjection projection;
 
@@ -39,6 +42,7 @@ public class Subscription {
         return projection.getId();
     }
 
+    @Projection
     class DecisionProjection {
         public SubscriptionId id;
         public boolean active;

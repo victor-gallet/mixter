@@ -2,6 +2,8 @@ package mixter.domain.identity;
 
 import mixter.Event;
 import mixter.EventPublisher;
+import mixter.doc.Aggregate;
+import mixter.doc.Projection;
 import mixter.domain.identity.events.UserConnected;
 import mixter.domain.identity.events.UserDisconnected;
 
@@ -10,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
+@Aggregate
 public class Session {
     private DecisionProjection projection;
 
@@ -24,6 +27,7 @@ public class Session {
         }
     }
 
+    @Projection
     private class DecisionProjection {
         private SessionId id;
         private UserId userId;

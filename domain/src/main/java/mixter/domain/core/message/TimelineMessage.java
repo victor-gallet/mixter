@@ -1,7 +1,9 @@
 package mixter.domain.core.message;
 
+import mixter.doc.Projection;
 import mixter.domain.identity.UserId;
 
+@Projection
 public class TimelineMessage {
     private final UserId ownerId;
     private final UserId authorId;

@@ -2,6 +2,8 @@ package mixter.domain.identity;
 
 import mixter.Event;
 import mixter.EventPublisher;
+import mixter.doc.Aggregate;
+import mixter.doc.Projection;
 import mixter.domain.identity.events.UserConnected;
 import mixter.domain.identity.events.UserRegistered;
 
@@ -11,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
+@Aggregate
 public class UserIdentity {
     private DecisionProjection projection;
 
@@ -26,6 +29,7 @@ public class UserIdentity {
         eventPublisher.publish(new UserConnected(SessionId.generate(), projection.userId, Instant.now()));
     }
 
+    @Projection
     private class DecisionProjection {
         public UserId userId;
         private Map<Class, Consumer> appliers = new HashMap<>();

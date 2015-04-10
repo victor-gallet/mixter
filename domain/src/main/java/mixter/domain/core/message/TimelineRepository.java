@@ -1,5 +1,8 @@
 package mixter.domain.core.message;
 
+import mixter.doc.Repository;
+
+@Repository
 public interface TimelineRepository {
     TimelineMessage save(TimelineMessage message);
 

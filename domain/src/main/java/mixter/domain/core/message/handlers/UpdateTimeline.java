@@ -1,11 +1,13 @@
 package mixter.domain.core.message.handlers;
 
+import mixter.doc.Handler;
 import mixter.domain.core.message.TimelineMessage;
 import mixter.domain.core.message.TimelineRepository;
 import mixter.domain.core.message.events.MessagePublished;
 import mixter.domain.core.message.events.MessageRepublished;
 import mixter.domain.core.subscription.events.FolloweeMessagePublished;
 
+@Handler
 public class UpdateTimeline {
 
     private final TimelineRepository repository;

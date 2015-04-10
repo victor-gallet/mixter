@@ -1,6 +1,7 @@
 package mixter.domain.core.subscription.handlers;
 
 import mixter.EventPublisher;
+import mixter.doc.Handler;
 import mixter.domain.core.message.events.MessagePublished;
 import mixter.domain.core.message.events.MessageReplied;
 import mixter.domain.core.message.events.MessageRepublished;
@@ -12,6 +13,7 @@ import mixter.domain.identity.UserId;
 
 import java.util.Set;
 
+@Handler
 public class NotifyFollowerOfFolloweeMessage {
 
     private FollowerRepository followerRepository;

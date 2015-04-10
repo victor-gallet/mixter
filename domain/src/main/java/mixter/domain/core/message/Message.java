@@ -2,6 +2,8 @@ package mixter.domain.core.message;
 
 import mixter.Event;
 import mixter.EventPublisher;
+import mixter.doc.Aggregate;
+import mixter.doc.Projection;
 import mixter.domain.core.message.events.MessageDeleted;
 import mixter.domain.core.message.events.MessagePublished;
 import mixter.domain.core.message.events.MessageReplied;
@@ -11,6 +13,7 @@ import mixter.domain.identity.UserId;
 import java.util.*;
 import java.util.function.Consumer;
 
+@Aggregate
 public class Message {
     private final DecisionProjection projection;
 
@@ -48,6 +51,7 @@ public class Message {
         return projection.getId();
     }
 
+    @Projection
     private class DecisionProjection {
         private MessageId id;
         private Map<Class, Consumer> appliers = new HashMap<>();
