@@ -10,6 +10,9 @@ public class MessageId implements AggregateId{
     public MessageId() {
         this.id = UUID.randomUUID().toString();
     }
+    public MessageId(String id) {
+        this.id = id;
+    }
 
     @Override
     public boolean equals(Object o) {
