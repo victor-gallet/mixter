@@ -3,6 +3,7 @@ package mixter.domain.core.message.handlers;
 import mixter.domain.core.message.MessageId;
 import mixter.domain.core.message.TimelineMessage;
 import mixter.domain.core.message.TimelineRepository;
+import mixter.domain.core.message.events.MessageDeleted;
 import mixter.domain.core.message.events.MessagePublished;
 import mixter.domain.core.message.events.MessageRepublished;
 import mixter.domain.core.subscription.SubscriptionId;
@@ -31,14 +32,13 @@ public class UpdateTimelineTest {
     @Test
     public void WhenUpdateTimelineAppliesAMessagePublishedEventThenATimelineMessageIsCreated() {
         // Given
-        String content = "hello world";
         MessageId messageId = new MessageId();
-        MessagePublished messagePublished = new MessagePublished(messageId, content, AUTHOR_ID);
+        MessagePublished messagePublished = new MessagePublished(messageId, CONTENT, AUTHOR_ID);
         UpdateTimeline handler = new UpdateTimeline(timelineRepository);
         // When
         handler.apply(messagePublished);
         // Then
-        assertThat(timelineRepository.getMessages()).containsExactly(new TimelineMessage(AUTHOR_ID, AUTHOR_ID, content, messageId));
+        assertThat(timelineRepository.getMessages()).containsExactly(new TimelineMessage(AUTHOR_ID, AUTHOR_ID, CONTENT, messageId));
     }
 
     @Test
@@ -53,6 +53,44 @@ public class UpdateTimelineTest {
         assertThat(timelineRepository.getMessages()).containsExactly(new TimelineMessage(USER_ID, AUTHOR_ID, CONTENT, messageId));
     }
 
+    @Test
+    public void WhenUpdateTimelineAppliesAMessageDeletedEventThenTheTimelineMessagesWithThisMessageIdAreDeleted() {
+        // Given
+        MessageId messageId = new MessageId();
+        MessagePublished messagePublished = new MessagePublished(messageId, CONTENT, AUTHOR_ID);
+        MessageRepublished messageRepublished = new MessageRepublished(messageId, USER_ID, AUTHOR_ID, CONTENT);
+        UpdateTimeline handler = new UpdateTimeline(timelineRepository);
+        handler.apply(messagePublished);
+        handler.apply(messageRepublished);
+
+        MessageDeleted messageDeleted= new MessageDeleted(messageId);
+
+        // When
+        handler.apply(messageDeleted);
+
+        // Then
+        assertThat(timelineRepository.getMessages()).isEmpty();
+    }
+
+    @Test
+    public void WhenUpdateTimelineAppliesAMessageDeletedEventThenTheTimelineMessagesWithOtherMessageIdAreNotDeleted() {
+        // Given
+        MessageId messageId = new MessageId();
+        MessageId messageId2 = new MessageId();
+        MessagePublished messagePublished = new MessagePublished(messageId, CONTENT, AUTHOR_ID);
+        MessageRepublished messageRepublished = new MessageRepublished(messageId2, USER_ID, AUTHOR_ID, CONTENT);
+        UpdateTimeline handler = new UpdateTimeline(timelineRepository);
+        handler.apply(messagePublished);
+        handler.apply(messageRepublished);
+
+        MessageDeleted messageDeleted= new MessageDeleted(messageId);
+
+        // When
+        handler.apply(messageDeleted);
+
+        // Then
+        assertThat(timelineRepository.getMessages()).containsExactly(new TimelineMessage(USER_ID, AUTHOR_ID, CONTENT, messageId2));
+    }
     @Test
     public void WhenUpdateTimelineAppliesAFolloweeMessagePublishedEventThenATimelineMessageIsCreated() {
         // Given
@@ -75,7 +113,7 @@ public class UpdateTimelineTest {
 
         @Override
         public TimelineMessage save(TimelineMessage message) {
-            messages.removeIf(timelineMessage -> timelineMessage.getMessageId() == message.getMessageId());
+            messages.removeIf(timelineMessage -> timelineMessage.getMessageId().equals(message.getMessageId()));
             messages.add(message);
             return message;
         }
@@ -83,6 +121,11 @@ public class UpdateTimelineTest {
         @Override
         public TimelineMessage getByMessageId(MessageId messageId) {
             return messages.stream().filter(message -> message.getMessageId() == messageId).findFirst().get();
+        }
+
+        @Override
+        public void removeByMessageId(MessageId messageId) {
+            messages.removeIf(timelineMessage -> timelineMessage.getMessageId().equals(messageId));
         }
     }
 }

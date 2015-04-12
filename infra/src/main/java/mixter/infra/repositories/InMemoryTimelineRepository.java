@@ -24,4 +24,9 @@ public class InMemoryTimelineRepository implements TimelineRepository {
                 .findFirst();
        return first.get();
     }
+
+    @Override
+    public void removeByMessageId(MessageId messageId) {
+        messages.removeIf(message->message.getMessageId().equals(messageId));
+    }
 }
