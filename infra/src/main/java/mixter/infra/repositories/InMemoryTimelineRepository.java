@@ -3,13 +3,12 @@ package mixter.infra.repositories;
 import mixter.domain.core.message.MessageId;
 import mixter.domain.core.message.TimelineMessage;
 import mixter.domain.core.message.TimelineRepository;
+import mixter.domain.identity.UserId;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 public class InMemoryTimelineRepository implements TimelineRepository {
-    private Set<TimelineMessage> messages=new HashSet<>();
+    private Set<TimelineMessage> messages=new LinkedHashSet<>();
 
     @Override
     public TimelineMessage save(TimelineMessage message) {
@@ -28,5 +27,12 @@ public class InMemoryTimelineRepository implements TimelineRepository {
     @Override
     public void removeByMessageId(MessageId messageId) {
         messages.removeIf(message->message.getMessageId().equals(messageId));
+    }
+
+    @Override
+    public List<TimelineMessage> getByUserId(UserId userId) {
+        ArrayList<TimelineMessage> timelineMessages = new ArrayList<>(messages);
+        timelineMessages.removeIf(x -> !x.getOwnerId().equals(userId));
+        return timelineMessages;
     }
 }

@@ -9,6 +9,7 @@ import mixter.domain.core.message.events.MessageRepublished;
 import mixter.domain.core.subscription.SubscriptionId;
 import mixter.domain.core.subscription.events.FolloweeMessagePublished;
 import mixter.domain.identity.UserId;
+import org.assertj.core.util.Lists;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -126,6 +127,11 @@ public class UpdateTimelineTest {
         @Override
         public void removeByMessageId(MessageId messageId) {
             messages.removeIf(timelineMessage -> timelineMessage.getMessageId().equals(messageId));
+        }
+
+        @Override
+        public List<TimelineMessage> getByUserId(UserId userId) {
+            return Lists.emptyList();
         }
     }
 }
