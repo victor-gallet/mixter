@@ -12,4 +12,20 @@ public class SessionIdTest {
 
         assertThat(sessionId1).isNotEqualTo(sessionId2);
     }
+
+    @Test
+    public void shouldHaveValueAsToString() throws Exception {
+        String value = "test";
+        SessionId sessionId = new SessionId(value);
+        assertThat(sessionId.toString()).isEqualTo(value);
+    }
+
+
+    @Test
+    public void shouldBeEqualIfTheyHaveTheSameValue() throws Exception {
+        String value = "test";
+        SessionId sessionId1 = new SessionId(value);
+        SessionId sessionId2 = new SessionId(value);
+        assertThat(sessionId1).isEqualTo(sessionId2);
+    }
 }
