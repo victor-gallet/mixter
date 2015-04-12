@@ -25,8 +25,10 @@ public class UserIdentity {
         eventPublisher.publish(new UserRegistered(userId));
     }
 
-    public void logIn(EventPublisher eventPublisher) {
-        eventPublisher.publish(new UserConnected(SessionId.generate(), projection.userId, Instant.now()));
+    public SessionId logIn(EventPublisher eventPublisher) {
+        SessionId sessionId = SessionId.generate();
+        eventPublisher.publish(new UserConnected(sessionId, projection.userId, Instant.now()));
+        return sessionId;
     }
 
     @Projection

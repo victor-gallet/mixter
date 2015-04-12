@@ -38,10 +38,10 @@ public class UserIdentityTest extends DomainTest {
         // Given
         UserIdentity userIdentity = userIdentityFor(new UserRegistered(USER_ID));
         // When
-        userIdentity.logIn(eventPublisher);
+        SessionId sessionId = userIdentity.logIn(eventPublisher);
         // Then
-        UserConnected expected = new UserConnected(SessionId.generate(), USER_ID, Instant.now());
         assertThat(eventPublisher.publishedEvents).extracting("userId").contains(USER_ID);
+        assertThat(eventPublisher.publishedEvents).extracting("sessionId").contains(sessionId);
     }
 
     private UserIdentity userIdentityFor(Event... events) {
