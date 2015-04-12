@@ -31,6 +31,10 @@ public class UserIdentity {
         return sessionId;
     }
 
+    public UserId getId(){
+        return projection.userId;
+    }
+
     @Projection
     private class DecisionProjection {
         public UserId userId;

@@ -27,6 +27,10 @@ public class Session {
         }
     }
 
+    public SessionId getId() {
+        return projection.getId();
+    }
+
     @Projection
     private class DecisionProjection {
         private SessionId id;

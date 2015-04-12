@@ -7,23 +7,20 @@ import mixter.domain.core.subscription.SubscriptionId;
 import mixter.domain.core.subscription.SubscriptionRepository;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
-public class EventSubscriptionRepository implements SubscriptionRepository{
-    private EventStore store;
+public class EventSubscriptionRepository extends AggregateRepository<Subscription> implements SubscriptionRepository{
 
     public EventSubscriptionRepository(EventStore store) {
+        super(store);
+    }
 
-        this.store = store;
+    @Override
+    protected Subscription fromHistory(List<Event> history) {
+        return new Subscription(history);
     }
 
     @Override
     public Subscription getById(SubscriptionId subscriptionId) {
-        List<Event> history = store.getEventsOfAggregate(subscriptionId);
-        if(history.isEmpty()) {
-            throw new NoSuchElementException();
-        }else{
-            return new Subscription(history);
-        }
+        return super.getById(subscriptionId);
     }
 }
