@@ -26,6 +26,10 @@ public class SessionProjection {
         return active;
     }
 
+    public boolean hasMail(String value){
+        return this.userId.getEmail().equals(value);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
