@@ -21,9 +21,10 @@ public class Message {
         projection = new DecisionProjection(eventHistory);
     }
 
-    public static void publish(PublishMessage publishMessage, EventPublisher eventPublisher) {
+    public static MessageId publish(PublishMessage publishMessage, EventPublisher eventPublisher) {
         MessageId messageId = new MessageId();
         eventPublisher.publish(new MessagePublished(messageId, publishMessage.getMessage(), publishMessage.getAuthorId()));
+        return messageId;
     }
 
     public void republish(UserId userId, EventPublisher eventPublisher, UserId authorId, String content) {

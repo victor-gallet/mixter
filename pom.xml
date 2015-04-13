@@ -14,9 +14,15 @@
     <modules>
         <module>infra</module>
         <module>domain</module>
+        <module>web</module>
     </modules>
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>net.code-story</groupId>
+                <artifactId>http</artifactId>
+                <version>2.91</version>
+            </dependency>
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
