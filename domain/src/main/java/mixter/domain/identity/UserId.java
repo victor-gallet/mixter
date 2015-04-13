@@ -6,7 +6,7 @@ public class UserId implements AggregateId{
     private String email;
 
     public UserId(String email) {
-        if (email.trim().isEmpty()) {
+        if (email == null || email.trim().isEmpty()) {
             throw new UserEmailCannotBeEmpty();
         }
         this.email = email;

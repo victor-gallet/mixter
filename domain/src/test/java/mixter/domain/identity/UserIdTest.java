@@ -41,4 +41,13 @@ public class UserIdTest {
         // When
         new UserId(email);
     }
+
+    @Test
+    public void newUserIdWithNullStringThrowsUserEmailCannotBeEmpty() {
+        // Given
+        String email = null;
+        thrown.expect(UserEmailCannotBeEmpty.class);
+        // When
+        new UserId(email);
+    }
 }
