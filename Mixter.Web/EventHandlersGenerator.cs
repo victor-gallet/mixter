@@ -27,7 +27,6 @@ namespace Mixter.Web
             var followersRepository = new FollowersRepository();
             var sessionsRepository = new SessionsRepository();
 
-            yield return new MessagePublishedHandler();
             yield return new NotifyFollowerOfFolloweeMessage(followersRepository, messagesRepository, eventPublisher, subscriptionsesRepository);
             yield return new SessionHandler(sessionsRepository);
             yield return new UpdateTimeline(_timelineMessagesRepository, messagesRepository);

@@ -6,7 +6,7 @@ namespace Mixter.Domain.Identity
     {
         public string Id { get; private set; }
 
-        private SessionId(string id)
+        public SessionId(string id)
             : this()
         {
             Id = id;

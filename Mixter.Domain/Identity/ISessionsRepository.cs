@@ -5,5 +5,7 @@
         void Save(SessionProjection projection);
 
         void ReplaceBy(SessionProjection projection);
+
+        UserId? GetUserIdOfSession(SessionId sessionId);
     }
 }

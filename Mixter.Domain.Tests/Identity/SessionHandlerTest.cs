@@ -61,6 +61,11 @@ namespace Mixter.Domain.Tests.Identity
             {
                 Save(projection);
             }
+
+            public UserId? GetUserIdOfSession(SessionId sessionId)
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }
