@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Mixter.Domain.Core.Messages;
 using Mixter.Domain.Core.Messages.Events;
 using Mixter.Domain.Identity;
@@ -12,6 +14,8 @@ namespace Mixter.Domain.Tests.Core.Messages
         private const string MessageContent = "Hello miixit";
 
         private static readonly UserId Author = new UserId("pierre@mixit.fr");
+        private static readonly UserId Requacker = new UserId("alfred@mixit.fr");
+        private static readonly MessageId MessageId = MessageId.Generate();
 
         private readonly EventPublisherFake _eventPublisher;
 
@@ -47,6 +51,54 @@ namespace Mixter.Domain.Tests.Core.Messages
 
             var evt = (MessageQuacked)_eventPublisher.Events.First();
             Check.That(evt.Id).IsEqualTo(messageId);
+        }
+
+        [Fact]
+        public void WhenRequackMessageThenRaiseMessageRequacked()
+        {
+            Given(new MessageQuacked(MessageId, Author, MessageContent))
+            .When(o => o.Requack(_eventPublisher, Requacker))
+            .ThenHas(new MessageRequacked(MessageId, Requacker));
+        }
+
+        private GivenFactory Given(IDomainEvent evt)
+        {
+            return new GivenFactory(evt, _eventPublisher);
+        }
+
+        private class GivenFactory
+        {
+            private readonly IList<IDomainEvent> _events = new List<IDomainEvent>();
+            private readonly EventPublisherFake _eventPublisherFake;
+
+            public GivenFactory(IDomainEvent evt, EventPublisherFake eventPublisherFake)
+            {
+                _events.Add(evt);
+                _eventPublisherFake = eventPublisherFake;
+            }
+
+            public ThenFactory When(Action<Message> when)
+            {
+                var message = new Message(_events);
+                when(message);
+
+                return new ThenFactory(_eventPublisherFake);
+            }
+
+            public class ThenFactory
+            {
+                private readonly EventPublisherFake _eventPublisherFake;
+
+                public ThenFactory(EventPublisherFake eventPublisherFake)
+                {
+                    _eventPublisherFake = eventPublisherFake;
+                }
+
+                public void ThenHas(IDomainEvent domainEvent)
+                {
+                    Check.That(_eventPublisherFake.Events).Contains(domainEvent);
+                }
+            }
         }
     }
 }
