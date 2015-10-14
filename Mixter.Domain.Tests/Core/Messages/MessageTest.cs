@@ -61,6 +61,14 @@ namespace Mixter.Domain.Tests.Core.Messages
             .ThenHas(new MessageRequacked(MessageId, Requacker));
         }
 
+        [Fact]
+        public void WhenRequackMyOwnMessageThenDoNotRaiseMessageRequacked()
+        {
+            Given(new MessageQuacked(MessageId, Author, MessageContent))
+            .When(o => o.Requack(_eventPublisher, Author))
+            .ThenNothing();
+        }
+
         private GivenFactory Given(IDomainEvent evt)
         {
             return new GivenFactory(evt, _eventPublisher);
@@ -97,6 +105,11 @@ namespace Mixter.Domain.Tests.Core.Messages
                 public void ThenHas(IDomainEvent domainEvent)
                 {
                     Check.That(_eventPublisherFake.Events).Contains(domainEvent);
+                }
+
+                public void ThenNothing()
+                {
+                    Check.That(_eventPublisherFake.Events).IsEmpty();
                 }
             }
         }
