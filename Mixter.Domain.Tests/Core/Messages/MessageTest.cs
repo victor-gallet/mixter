@@ -69,6 +69,15 @@ namespace Mixter.Domain.Tests.Core.Messages
             .ThenNothing();
         }
 
+        [Fact]
+        public void WhenRequackTwoTimesSameMessageThenDoNotRaiseMessageRequacked()
+        {
+            Given(new MessageQuacked(MessageId, Author, MessageContent))
+                .And(new MessageRequacked(MessageId, Requacker))
+            .When(o => o.Requack(_eventPublisher, Requacker))
+            .ThenNothing();
+        }
+
         private GivenFactory Given(IDomainEvent evt)
         {
             return new GivenFactory(evt, _eventPublisher);
@@ -91,6 +100,13 @@ namespace Mixter.Domain.Tests.Core.Messages
                 when(message);
 
                 return new ThenFactory(_eventPublisherFake);
+            }
+
+            public GivenFactory And(IDomainEvent evt)
+            {
+                _events.Add(evt);
+
+                return this;
             }
 
             public class ThenFactory
