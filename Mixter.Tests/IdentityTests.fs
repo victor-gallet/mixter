@@ -17,7 +17,8 @@ type ``Given a User`` ()=
     member x.``When he logs in, then user connected event is returned`` () =
         let sessionId = SessionId.generate
         let getCurrentTime = fun () -> new DateTime()
-        apply DecisionProjection.initial [ UserRegistered { UserId = UserId "clem@mix-it.fr" } ]
+        [ UserRegistered { UserId = UserId "clem@mix-it.fr" } ]
+            |> apply 
             |> logIn sessionId getCurrentTime
             |> should equal [ UserConnected { SessionId = sessionId; UserId = UserId "clem@mix-it.fr"; ConnectedAt = getCurrentTime () } ]
 
@@ -30,7 +31,7 @@ type ``Given a started session`` ()=
         let userId = UserId "clem@mix-it.fr"
         let getCurrentTime = fun () -> new DateTime()
         [ UserRegistered { UserId = userId }; UserConnected { SessionId = sessionId; UserId = userId; ConnectedAt = getCurrentTime () }]
-            |> apply DecisionProjection.initial
+            |> apply
             |> logOut
             |> should equal [ UserDisconnected { SessionId = sessionId; UserId = userId } ]
     
@@ -42,7 +43,7 @@ type ``Given a started session`` ()=
         [ UserRegistered { UserId = userId }; 
         UserConnected { SessionId = sessionId; UserId = userId; ConnectedAt = getCurrentTime () };
         UserDisconnected { SessionId = sessionId; UserId = userId } ]
-            |> apply DecisionProjection.initial
+            |> apply
             |> logOut
             |> should equal []
 
@@ -58,12 +59,12 @@ type ``Given a handler of session events`` ()=
     member x.``When project user connected, then it returns a Session projection`` () =
         let userConnected = UserConnected { SessionId = sessionId; UserId = userId; ConnectedAt = DateTime.Now}
         let expectedAddSession = Add { SessionId = sessionId; UserId = userId }
-        project sessions userConnected
+        Read.apply sessions userConnected
             |> should equal expectedAddSession
             
     [<Test>]
     member x.``When project user disconnected, then it returns a Remove change of Session projection`` () =
         let userConnected = UserDisconnected { SessionId = sessionId; UserId = userId }
-        let expectedRemoveSession = Remove { SessionId = sessionId; UserId = userId }
-        project sessions userConnected
+        let expectedRemoveSession = Remove sessionId
+        Read.apply sessions userConnected
             |> should equal expectedRemoveSession

@@ -1,19 +1,21 @@
-﻿namespace Mixter.Infrastructure.Identity
+﻿module Mixter.Infrastructure.Identity.Read
 
 open Mixter.Domain.Identity
 open Mixter.Domain.Identity.Read
 
-module Read =
-    open System.Collections.Generic
+open System.Collections.Generic
 
-    let getSessionByIdFromMemory (sessions:Dictionary<SessionId, Session>) sessionId = 
+type MemorySessionsStore() =
+    let store = new Dictionary<SessionId, Session>()
+
+    member this.GetSession sessionId = 
         let mutable session = Session.empty
-        if sessions.TryGetValue(sessionId, &session) 
+        if store.TryGetValue(sessionId, &session) 
         then Some session
         else option.None
-    
-    let applyChangeInMemory (sessions:Dictionary<SessionId, Session>) change = 
+
+    member this.ApplyChange change = 
         match change with 
-        | Add session -> sessions.Add (session.SessionId, session)
-        | Remove session -> sessions.Remove session.SessionId |> ignore
+        | Add session -> store.Add (session.SessionId, session)
+        | Remove sessionId -> store.Remove sessionId |> ignore
         | None -> ()

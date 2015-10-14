@@ -1,28 +1,37 @@
 ﻿#load "Identity.fs"
 #load "Identity.Infrastructure.fs"
 
-open Mixter.Domain.Identity
 open System
 
-// Simulate user registration
-let userId = UserId "clem@mix-it.fr"
-let registrationEvents = register userId
+open Mixter
+open Domain.Identity
+open Infrastructure.Identity.Read
 
-// Simulate user reloading & logIn
-let user = apply DecisionProjection.initial registrationEvents
-let now = fun () -> DateTime.Now
-let sessionId = SessionId.generate
-let loginEvents = logIn sessionId now user
+let simulateUserRegistration = 
+    UserId "clem@mix-it.fr" 
+        |> register
 
-// Simulate session projection
-open Mixter.Infrastructure.Identity.Read
-open System.Collections.Generic
-// Use a Dictionary instead of Map
-let sessionProjections = new Dictionary<SessionId, Read.Session>()
-let getSessionById = getSessionByIdFromMemory sessionProjections
-loginEvents 
-|> Seq.map (Read.project getSessionById)
-|> Seq.iter (Mixter.Infrastructure.Identity.Read.applyChangeInMemory sessionProjections)
+let simulateUserLogin userEvents =
+    let now = fun () -> DateTime.Now
+    let sessionId = SessionId.generate
+    
+    let newEvents = 
+        userEvents
+            |> apply
+            |> logIn sessionId now
 
-// Read session projection
-let session = getSessionById sessionId
+    (newEvents, sessionId)
+        
+let sessionsStore = new MemorySessionsStore()
+
+let simulateSessionStorage (userEvents, sessionId) =
+    userEvents 
+        |> Seq.map (Read.apply sessionsStore.GetSession)
+        |> Seq.iter sessionsStore.ApplyChange
+
+    sessionId
+
+simulateUserRegistration
+    |> simulateUserLogin
+    |> simulateSessionStorage
+    |> sessionsStore.GetSession

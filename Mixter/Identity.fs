@@ -1,63 +1,63 @@
-﻿namespace Mixter.Domain
+﻿module Mixter.Domain.Identity
 
-module Identity =
-    open System
+open System
 
-    type UserId = UserId of string
+type UserId = UserId of string
 
-    type SessionId = SessionId of string
-        with static member generate = SessionId (Guid.NewGuid().ToString())
+type SessionId = SessionId of string
+    with static member generate = SessionId (Guid.NewGuid().ToString())
         
-    type Event = 
-        | UserRegistered of UserRegisteredEvent
-        | UserConnected of UserConnectedEvent
-        | UserDisconnected of UserDisconnectedEvent
-    and UserRegisteredEvent = { UserId: UserId }
-    and UserConnectedEvent = { SessionId: SessionId; UserId: UserId; ConnectedAt: DateTime}
-    and UserDisconnectedEvent = { SessionId: SessionId; UserId: UserId }
+type Event = 
+    | UserRegistered of UserRegisteredEvent
+    | UserConnected of UserConnectedEvent
+    | UserDisconnected of UserDisconnectedEvent
+and UserRegisteredEvent = { UserId: UserId }
+and UserConnectedEvent = { SessionId: SessionId; UserId: UserId; ConnectedAt: DateTime}
+and UserDisconnectedEvent = { SessionId: SessionId; UserId: UserId }
 
-    type DecisionProjection = {
-        UserId: UserId;
-        SessionId: SessionId option
-    }
-        with static member initial = { UserId = UserId ""; SessionId = None }
+type DecisionProjection = 
+    | UnregisteredUser
+    | RegisteredUser of RegisteredUser
+    | ConnectedUser of ConnectedUser
+and RegisteredUser = { UserId: UserId }
+and ConnectedUser = { UserId: UserId; SessionId: SessionId }
 
-    let register userId =
-        [ UserRegistered { UserId = userId } ]
+let register userId =
+    [ UserRegistered { UserId = userId } ]
 
-    let logIn sessionId getCurrentTime decisionProjection =
-        [ UserConnected { SessionId = sessionId; UserId = decisionProjection.UserId; ConnectedAt = getCurrentTime () } ]
+let logIn sessionId getCurrentTime decisionProjection =
+    match decisionProjection with
+    | RegisteredUser p -> [ UserConnected { SessionId = sessionId; UserId = p.UserId; ConnectedAt = getCurrentTime () } ]
+    | _ -> []
 
-    let logOut decisionProjection =
-        match decisionProjection.SessionId with
-            | Some sessionId -> [ UserDisconnected { SessionId = sessionId; UserId = decisionProjection.UserId } ]
-            | None -> []
+let logOut decisionProjection =
+    match decisionProjection with
+    | ConnectedUser p -> [ UserDisconnected { SessionId = p.SessionId; UserId = p.UserId } ]
+    | _ -> []
 
-    let applyOne decisionProjection event =
+let applyOne decisionProjection event =
+    match (decisionProjection, event) with
+    | (UnregisteredUser, UserRegistered e) -> RegisteredUser { UserId = e.UserId }
+    | (RegisteredUser _, UserConnected e) -> ConnectedUser { UserId = e.UserId; SessionId = e.SessionId }
+    | (ConnectedUser _, UserDisconnected e) -> RegisteredUser { UserId = e.UserId }
+    | _ -> failwith "Invalid transition"
+
+let apply events =
+    Seq.fold applyOne UnregisteredUser events
+
+module Read =
+    type Session = { SessionId: SessionId; UserId: UserId }
+        with static member empty = { SessionId = SessionId ""; UserId = UserId "" }
+        
+    type RepositoryChange = 
+        | None
+        | Add of Session
+        | Remove of SessionId
+
+    type getSessionById = SessionId -> Session option
+
+    let apply (getSessionById:getSessionById) event = 
         match event with
-        | UserRegistered e -> { decisionProjection with UserId = e.UserId }
-        | UserConnected e -> { decisionProjection with SessionId = Some e.SessionId }
-        | UserDisconnected _ -> { decisionProjection with SessionId = None }
-
-    let apply decisionProjection events =
-        Seq.fold applyOne decisionProjection events
-
-    module Read =
-        type RepositoryChange<'a> = 
-            | None
-            | Add of 'a
-            | Remove of 'a
-
-        type Session = { SessionId: SessionId; UserId: UserId }
-            with static member empty = { SessionId = SessionId ""; UserId = UserId "" }
-
-        type getSessionById = SessionId -> Session option
-
-        let project (getSessionById:getSessionById) event = 
-            match event with
-            | UserConnected e -> Add { SessionId = e.SessionId; UserId = e.UserId }
-            | UserDisconnected e -> 
-                let session = getSessionById e.SessionId
-                match session with
-                | Some session -> Remove session
-                | option.None -> None
+        | UserConnected e -> Add { SessionId = e.SessionId; UserId = e.UserId }
+        | UserDisconnected e -> Remove e.SessionId
+        | UserRegistered _ -> None
