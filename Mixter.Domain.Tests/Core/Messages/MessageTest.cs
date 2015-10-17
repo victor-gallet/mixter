@@ -86,6 +86,14 @@ namespace Mixter.Domain.Tests.Core.Messages
             .ThenHas(new MessageDeleted(MessageId, Author));
         }
 
+        [Fact]
+        public void WhenDeleteBySomeoneElseThanAuthorThenDoNotRaiseMessageDeleted()
+        {
+            Given(new MessageQuacked(MessageId, Author, MessageContent))
+            .When(o => o.Delete(_eventPublisher, new UserId("clement@mix-it.fr")))
+            .ThenNothing();
+        }
+
         private GivenFactory Given(IDomainEvent evt)
         {
             return new GivenFactory(evt, _eventPublisher);
