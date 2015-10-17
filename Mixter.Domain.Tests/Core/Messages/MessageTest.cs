@@ -94,6 +94,15 @@ namespace Mixter.Domain.Tests.Core.Messages
             .ThenNothing();
         }
 
+        [Fact]
+        public void GiveDeletedMessageWhenDeleteThenNothing()
+        {
+            Given(new MessageQuacked(MessageId, Author, MessageContent))
+                .And(new MessageDeleted(MessageId, Author))
+            .When(o => o.Delete(_eventPublisher, Author))
+            .ThenNothing();
+        }
+
         private GivenFactory Given(IDomainEvent evt)
         {
             return new GivenFactory(evt, _eventPublisher);
