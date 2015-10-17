@@ -103,6 +103,15 @@ namespace Mixter.Domain.Tests.Core.Messages
             .ThenNothing();
         }
 
+        [Fact]
+        public void GivenDeletedMessageWhenRequackThenDoNotRaiseMessageRequacked()
+        {
+            Given(new MessageQuacked(MessageId, Author, MessageContent))
+                .And(new MessageDeleted(MessageId, Author))
+            .When(o => o.Requack(_eventPublisher, new UserId("emilien@mix-it.fr")))
+            .ThenNothing();
+        }
+
         private GivenFactory Given(IDomainEvent evt)
         {
             return new GivenFactory(evt, _eventPublisher);
