@@ -5,13 +5,16 @@ import mixter.doc.Projection;
 import mixter.domain.DecisionProjectionBase;
 import mixter.domain.Event;
 import mixter.domain.EventPublisher;
+import mixter.domain.SpyEventPublisher;
 import mixter.domain.identity.UserId;
+import mixter.domain.core.message.events.MessageDeleted;
 import mixter.domain.core.message.events.MessageQuacked;
 import mixter.domain.core.message.events.MessageRequacked;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 
 @Aggregate
 public class Message {
@@ -59,4 +62,9 @@ public class Message {
             return id;
         }
     }
+
+	public void delete(UserId author_id, EventPublisher eventPublisher) {
+		MessageDeleted messageDeleted = new MessageDeleted(projection.getId());
+		eventPublisher.publish(messageDeleted);
+	}
 }
