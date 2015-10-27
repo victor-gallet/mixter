@@ -42,29 +42,41 @@ public class Message {
     private class DecisionProjection extends DecisionProjectionBase {
         private MessageId id;
         public Set<UserId> publishers=new HashSet<>();
+		private boolean deleted;
 
         public DecisionProjection(List<Event> history) {
             super.register(MessageQuacked.class, this::apply);
             super.register(MessageRequacked.class, this::apply);
+            super.register(MessageDeleted.class, this::apply);
             history.forEach(this::apply);
         }
 
         private void apply(MessageQuacked event) {
             id = event.getMessageId();
             publishers.add(event.getAuthorId());
+            deleted = false;
         }
 
         private void apply(MessageRequacked event) {
             publishers.add(event.getUserId());
+            deleted = false;
+        }
+        
+        private void apply(MessageDeleted event) {
+        	deleted = true;
         }
 
         public MessageId getId() {
             return id;
         }
+        
+        public boolean isDeleted() {
+        	return deleted;
+        }
     }
 
 	public void delete(UserId author_id, EventPublisher eventPublisher) {
-		if (!projection.publishers.contains(author_id)) {
+		if (!projection.publishers.contains(author_id) || projection.isDeleted()) {
 			return;
 		}
 		MessageDeleted messageDeleted = new MessageDeleted(projection.getId());
