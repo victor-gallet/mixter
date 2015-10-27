@@ -1,8 +1,8 @@
 #!/bin/bash
 
-testsNbByStep=( 4 1 4 4 2 )
+testsNbByStep=( 4 1 4 )
 
-masterBranch="origin/master"
+masterBranch="master"
 testBranch="test"
 solutionBranch="solution"
 workshopBranch="workshop"
