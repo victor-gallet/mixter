@@ -64,6 +64,9 @@ public class Message {
     }
 
 	public void delete(UserId author_id, EventPublisher eventPublisher) {
+		if (!projection.publishers.contains(author_id)) {
+			return;
+		}
 		MessageDeleted messageDeleted = new MessageDeleted(projection.getId());
 		eventPublisher.publish(messageDeleted);
 	}
