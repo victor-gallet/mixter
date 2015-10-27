@@ -59,7 +59,6 @@ public class Message {
 
         private void apply(MessageRequacked event) {
             publishers.add(event.getUserId());
-            deleted = false;
         }
         
         private void apply(MessageDeleted event) {
